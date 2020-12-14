@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   id?: string;
   cardHolders?: PaymentDetail[];
   selectedIndex?: number;
+  countCardHolders!: number;
 
   constructor(
     private apiService: apiService,
@@ -31,36 +32,49 @@ export class HomeComponent implements OnInit {
       this.cardHolders = data.sort(
         (a: any, b: any) => a.created_at - b.created_at
       );
+      this.countCardHolders = data.length;
     });
   }
   onSubmit(cardHolderData: any) {
     if (!this.editClicked) {
       this.apiService.createCardHolder(cardHolderData).subscribe((data) => {
         this.cardHolders?.unshift(data);
+        this.countCardHolders = data.length;
       });
     } else {
-      this.apiService.patchCardHolder(cardHolderData, this.id).subscribe((data)  => {
-        this.cardHolders?.map((_data: PaymentDetail, index) => {
-          if (index === this.selectedIndex) {
-            _data.cardHolderName = cardHolderData.cardHolderName
-            _data.cardNumber = cardHolderData.cardNumber
-            _data.expirationDate = cardHolderData.expirationDate
-            _data.cvv = cardHolderData.cvv
-          }
-        })
-      })
+      this.apiService
+        .patchCardHolder(cardHolderData, this.id)
+        .subscribe((data) => {
+          this.cardHolders?.map((_data: PaymentDetail, index) => {
+            if (index === this.selectedIndex) {
+              _data.cardHolderName = cardHolderData.cardHolderName;
+              _data.cardNumber = cardHolderData.cardNumber;
+              _data.expirationDate = cardHolderData.expirationDate;
+              _data.cvv = cardHolderData.cvv;
+            }
+          });
+        });
     }
   }
   editClick(cardHolderData: PaymentDetail, id: string, index: number) {
     this.model = this.formBuilder.group({
-      cardHolderName: new FormControl(cardHolderData.cardHolderName, [Validators.required]),
-      cardNumber: new FormControl(cardHolderData.cardNumber, [Validators.required]),
-      expirationDate: new FormControl(cardHolderData.expirationDate, [Validators.required]),
-      cvv: new FormControl(cardHolderData.cvv, [Validators.required, Validators.max(3)]),
+      cardHolderName: new FormControl(cardHolderData.cardHolderName, [
+        Validators.required,
+      ]),
+      cardNumber: new FormControl(cardHolderData.cardNumber, [
+        Validators.required,
+      ]),
+      expirationDate: new FormControl(cardHolderData.expirationDate, [
+        Validators.required,
+      ]),
+      cvv: new FormControl(cardHolderData.cvv, [
+        Validators.required,
+        Validators.max(3),
+      ]),
     });
-    this.editClicked = true
-    this.selectedIndex = index
-    this.id = id
+    this.editClicked = true;
+    this.selectedIndex = index;
+    this.id = id;
   }
   addNew() {
     this.editClicked = false;
@@ -70,12 +84,13 @@ export class HomeComponent implements OnInit {
       expirationDate: new FormControl('', [Validators.required]),
       cvv: new FormControl('', [Validators.required, Validators.max(3)]),
     });
-    this.id = undefined
-    this.selectedIndex = undefined
+    this.id = undefined;
+    this.selectedIndex = undefined;
   }
   destroyCard(id: string, index: number) {
-    this.apiService
-      .destroy(id)
-      .subscribe((_) => this.cardHolders?.splice(index, 1));
+    this.apiService.destroy(id).subscribe((_) => {
+      this.cardHolders?.splice(index, 1);
+      this.countCardHolders = this.countCardHolders - 1;
+    });
   }
 }
