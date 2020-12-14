@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&display=swap");
+@import "~bootstrap/scss/bootstrap";
+@import "~font-awesome/css/font-awesome.css";
+
+body {
+  font-family: "Work Sans", sans-serif !important;
+}
+
+.bg-success-50 {
+  background: #28a74530 !important;
+  &:hover {
+    background: #28a74550 !important;
+  }
+}
+.bg-danger-50 {
+  background: #dc354530 !important;
+  &:hover {
+    background: #dc354550 !important;
+  }
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}

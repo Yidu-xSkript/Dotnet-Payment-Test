@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4"
+      src="https://play-lh.googleusercontent.com/Y2_nyEd0zJftXnlhQrWoweEvAy4RzbpDah_65JGQDKo9zCcBxHVpajYgXWFZcXdKS_o"
+      alt="" width="72" height="72">
+    <h2>Dotnet Payment Test form</h2>
+    <p class="lead">Below is an example form built entirely with Bootstrap’s form controls with the work sans font.
+      These total ruse is to test dotnet 5.0 CRUD. Let's add, update, destroy and read Payment cards</p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">All cards</span>
+        <span class="badge badge-danger badge-pill">3</span>
+      </h4>
+      <ul class="list-group mb-3 shadow-sm">
+
+        <li class="list-group-item d-flex justify-content-between lh-condensed"
+          *ngFor="let cardHolder of cardHolders; let i = index" [attr.data-index]="i">
+          <div>
+            <h6 class="my-0">{{cardHolder.cardHolderName}}</h6>
+            <small class="text-muted">{{ cardHolder.cardNumber }}</small>
+            <div><small class="text-muted">{{ cardHolder.expirationDate }}</small></div>
+          </div>
+          <div>
+            <span class="text-black bg-success-50 p-2 rounded-circle cursor-pointer" (click)="editClick(cardHolder, cardHolder.id, i)"><i
+                class="fa fa-edit"></i></span>
+            <span class="text-black bg-danger-50 p-2 ml-2 rounded-circle cursor-pointer"
+              (click)="destroyCard(cardHolder.id, i)"><i class="fa fa-trash"></i></span>
+          </div>
+        </li>
+        <li *ngIf="editClicked" class="list-group-item d-flex justify-content-between lh-condensed">
+          <button class="btn btn-primary btn-lg btn-block font-bold" (click)="addNew()">Add New<i
+              class="fa fa-plus-circle ml-2"></i></button>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8 order-md-1">
+      <h4 class="mb-3 font-weight-bold">Dotnet Payment Form</h4>
+      <form class="needs-validation shadow-sm p-3" autocomplete="off" [formGroup]="model"
+        (ngSubmit)="onSubmit(model.value)" novalidate>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-name">Name on card</label>
+            <input type="text" class="form-control" id="cc-name" formControlName="cardHolderName" placeholder=""
+              required>
+            <small class="text-muted">Full name as displayed on card</small>
+            <div class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-number">Credit card number</label>
+            <input type="text" class="form-control" formControlName="cardNumber" id="cc-number" placeholder="" required>
+            <div class="invalid-feedback">
+              Credit card number is required
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-expiration">Expiration</label>
+            <input type="text" class="form-control" formControlName="expirationDate" id="cc-expiration" placeholder=""
+              required>
+            <div class="invalid-feedback">
+              Expiration date required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-cvv">CVV</label>
+            <input type="text" class="form-control" formControlName="cvv" id="cc-cvv" placeholder="" required>
+            <div class="invalid-feedback">
+              Security code required
+            </div>
+          </div>
+        </div>
+        <hr class="mb-4">
+        <button *ngIf="!editClicked" class="btn btn-success btn-lg btn-block font-bold" type="submit">Save Card</button>
+        <button *ngIf="editClicked" class="btn btn-warning btn-lg btn-block font-bold" type="submit">Update
+          Card</button>
+      </form>
+    </div>
+  </div>
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2017-2020 Dotnet Test</p>
+  </footer>
+</div>
